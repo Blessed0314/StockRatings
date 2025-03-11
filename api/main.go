@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+	InitDB()
+
 	mainRoutes := routes.InitRouter()
-	log.Fatal(http.ListenAndServe(":8080", mainRoutes))
+	log.Fatal(http.ListenAndServe(":3001", mainRoutes))
 }
