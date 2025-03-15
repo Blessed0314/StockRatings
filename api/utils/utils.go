@@ -4,18 +4,16 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
+    "github.com/Blessed0314/tru-test/api/dtos"
 )
 
-type Response struct {
-    StatusCode int       `json:"status_code"`
-    Message    string    `json:"message"`
-    Timestamp  time.Time `json:"timestamp"`
-}
+
 
 func SendResponse(w http.ResponseWriter, statusCode int, message string) {
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(statusCode)
-    response := Response{
+    response := dtos.Response{
         StatusCode: statusCode,
         Message:    message,
         Timestamp:  time.Now(),

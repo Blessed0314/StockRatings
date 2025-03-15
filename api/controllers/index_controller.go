@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/Blessed0314/tru-test/api/db"
+	"github.com/Blessed0314/tru-test/api/dtos"
 	"github.com/Blessed0314/tru-test/api/models"
 	"github.com/Blessed0314/tru-test/api/utils"
 	"github.com/joho/godotenv"
@@ -59,10 +60,7 @@ func GetData(w http.ResponseWriter, r *http.Request) {
         }
 
         // Estructura para deserializar la respuesta JSON
-        var response struct {
-            Items    []models.StockRating `json:"items"`
-            NextPage string               `json:"next_page"`
-        }
+        var response dtos.ApiData
 
         // Deserializar la respuesta en la estructura
         err = json.Unmarshal(body, &response)
