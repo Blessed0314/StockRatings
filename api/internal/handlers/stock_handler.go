@@ -1,37 +1,57 @@
 package handlers
 
 import (
-	"net/http"
-	"os"
+    "net/http"
+    "strconv"
 
-	"github.com/Blessed0314/tru-test/api/internal/services"
-	"github.com/Blessed0314/tru-test/api/internal/utils"
+    "github.com/Blessed0314/tru-test/api/internal/services"
+    "github.com/Blessed0314/tru-test/api/internal/utils"
 )
 
-// GetData maneja la petición HTTP para obtener datos
-func GetData(w http.ResponseWriter, r *http.Request) {
-	token := os.Getenv("API_TOKEN")
-	if token == "" {
-		utils.SendResponse(w, http.StatusInternalServerError, "API_TOKEN no está configurado")
-		return
-	}
+// validatePaginationParams valida los parámetros de paginación
+func validatePaginationParams(r *http.Request) (int, int) {
+    page, err := strconv.Atoi(r.URL.Query().Get("page"))
+    if err != nil || page < 1 {
+        page = 1
+    }
 
-	client := &services.ExternalAPIClient{
-		BaseURL: "https://8j5baasof2.execute-api.us-west-2.amazonaws.com/production/swechallenge/list",
-		Token:   token,
-	}
+    pageSize, err := strconv.Atoi(r.URL.Query().Get("size"))
+    if err != nil || pageSize < 1 {
+        pageSize = 8
+    }
 
-	data, err := client.FetchData()
-	if err != nil {
-		utils.SendResponse(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+    return page, pageSize
+}
 
-	err = services.SaveData(data)
-	if err != nil {
-		utils.SendResponse(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+// GetDataHandler handles the HTTP request to get data
 
-	utils.SendResponse(w, http.StatusOK, "Datos guardados correctamente")
+
+func GetStockRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
+    page, pageSize := validatePaginationParams(r)
+
+    recommendations, err := services.GetStockRecommendations()
+    if err != nil {
+        utils.SendResponse(w, http.StatusInternalServerError, "Error getting recommendations", nil)
+        return
+    }
+
+    // Aplicar paginación antes de enviar la respuesta
+    paginatedResponse := utils.Paginate(recommendations, page, pageSize)
+
+    utils.SendResponse(w, http.StatusOK, "Recommendations OK", paginatedResponse)
+}
+
+func GetAllStocksHandler(w http.ResponseWriter, r *http.Request) {
+    page, pageSize := validatePaginationParams(r)
+
+    stocks, err := services.GetAllStocks()
+    if err != nil {
+        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stocks", nil)
+        return
+    }
+
+    // Aplicar paginación antes de enviar la respuesta
+    paginatedResponse := utils.Paginate(stocks, page, pageSize)
+
+    utils.SendResponse(w, http.StatusOK, "Stocks OK", paginatedResponse)
 }

@@ -13,7 +13,7 @@ func main() {
 	db.InitDB()
 	err := db.DB.AutoMigrate(&models.StockRating{})
 	if err != nil {
-		log.Fatal("Error al migrar la base de datos", err)
+		log.Fatal("Error when migrating the database", err)
 	}
 
 	mainRoutes := routes.InitRouter()
