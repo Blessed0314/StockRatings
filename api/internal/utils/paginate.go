@@ -1,8 +1,10 @@
 package utils
 
-func Paginate[T any](data []T, page, pageSize int) ([]T, int, int) {
+import "github.com/Blessed0314/tru-test/api/internal/dtos"
+
+func Paginate[T any](data []T, page, pageSize int) dtos.PaginationDTO[T] {
     total := len(data)
-    
+
     if pageSize <= 0 {
         pageSize = 10
     }
@@ -10,14 +12,25 @@ func Paginate[T any](data []T, page, pageSize int) ([]T, int, int) {
         page = 1
     }
 
-    // Calcular inicio y fin del slice paginado
     start := (page - 1) * pageSize
     if start >= total {
-        return []T{}, total, 0
+        return dtos.PaginationDTO[T]{
+            Total:    total,
+            Page:     page,
+            PageSize: pageSize,
+            Count:    0,
+            Stocks:     []T{},
+        }
     }
 
     end := min(start + pageSize, total)
 
-    return data[start:end], total, end - start
+    return dtos.PaginationDTO[T]{
+        Total:    total,
+        Page:     page,
+        PageSize: pageSize,
+        Count:    end - start,
+        Stocks:     data[start:end],
+    }
 }
 

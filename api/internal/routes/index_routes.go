@@ -12,6 +12,7 @@ func InitRouter() *mux.Router {
 
 	stock := routes.PathPrefix("/stock").Subrouter()
 	stock.HandleFunc("/recommendations", handlers.GetStockRecommendationsHandler).Methods("GET")
-
+	stock.HandleFunc("/all", handlers.GetAllStocksHandler).Methods("GET")
 	return routes
 }
+
