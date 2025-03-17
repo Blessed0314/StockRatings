@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Blessed0314/tru-test/api/pkg/db"
-	"github.com/Blessed0314/tru-test/api/internal/routes"
 	"github.com/Blessed0314/tru-test/api/internal/models"
+	"github.com/Blessed0314/tru-test/api/internal/routes"
+	"github.com/Blessed0314/tru-test/api/pkg/db"
 )
 
 func main() {
@@ -17,5 +17,7 @@ func main() {
 	}
 
 	mainRoutes := routes.InitRouter()
-	log.Fatal(http.ListenAndServe(":3001", mainRoutes))
+	corsRoutes := routes.ConfigureCORS(mainRoutes)
+
+	log.Fatal(http.ListenAndServe(":3001", corsRoutes))
 }
