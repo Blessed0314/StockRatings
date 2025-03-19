@@ -5,5 +5,5 @@ type PaginationDTO[T any] struct {
     Page     int `json:"page"`     
     PageSize int `json:"pageSize"` 
     Count    int `json:"count"`    
-    Stocks   []T `json:"stock_ratings"`     
+    Stocks   []T `json:"stocks"`     
 }
