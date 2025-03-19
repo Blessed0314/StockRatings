@@ -8,7 +8,7 @@ import (
     "github.com/Blessed0314/tru-test/api/internal/utils"
 )
 
-// validatePaginationParams valida los parámetros de paginación
+
 func validatePaginationParams(r *http.Request) (int, int) {
     page, err := strconv.Atoi(r.URL.Query().Get("page"))
     if err != nil || page < 1 {
@@ -17,14 +17,11 @@ func validatePaginationParams(r *http.Request) (int, int) {
 
     pageSize, err := strconv.Atoi(r.URL.Query().Get("size"))
     if err != nil || pageSize < 1 {
-        pageSize = 8
+        pageSize = 10
     }
 
     return page, pageSize
 }
-
-// GetDataHandler handles the HTTP request to get data
-
 
 func GetStockRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
     page, pageSize := validatePaginationParams(r)
