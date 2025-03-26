@@ -1,12 +1,18 @@
 <script setup lang="ts">
-  import { onMounted } from "vue";
+  import { computed, onMounted } from "vue";
   import { useStockStore } from "./store/store-stock-selected";
 
   import PageHeader from "./components/PageHeader.vue";
   import StockList from "./components/StockList.vue";
-  import Pagination from "./components/Pagination.vue";
- 
+  import Pager from "./components/Pager.vue";
+  import type { Pagination } from './models/pagination.model'; 
   const stockStore = useStockStore();
+
+  const pagination = computed<Pagination>(() => ({
+    total: stockStore.total,
+    page: stockStore.page,
+    pageSize: stockStore.pageSize,
+  }));
 
   onMounted(() => {
     stockStore.isRecomendation = false;
@@ -24,10 +30,8 @@
       </span>
     </button>
   </div>
-  <Pagination 
-    :total="stockStore.total" 
-    :page="stockStore.page" 
-    :pageSize="stockStore.pageSize" 
+  <Pager 
+    :pagination="pagination"
     @pageChange="stockStore.onPageChange" 
   />
   <StockList :stocks="stockStore.stocks" />
