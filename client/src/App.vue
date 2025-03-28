@@ -24,8 +24,8 @@
 <template>
   <PageHeader />
   <div class="flex justify-center">
-    <button class="px-3 py-2 bg-red-300 border rounded hover:bg-red-500" @click="stockStore.toggleRecomendation">
-      <span class="font-bold">
+    <button class="px-3 py-2 bg-sky-800/70 border rounded hover:bg-green-600/70" @click="stockStore.toggleRecomendation">
+      <span class="font-bold text-white">
         {{stockStore.isRecomendation ? "Return to Stockrating" :"Get Recomendations per Score"}}
       </span>
     </button>

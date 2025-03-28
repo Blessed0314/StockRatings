@@ -14,7 +14,7 @@ function formatCurrency(value: number): string {
 }
 </script>
 <template>
-  <tr class="border-b border-gray-200 hover:bg-gray-100 transition">
+  <tr class="border-b border-gray-400 hover:bg-sky-300 transition">
     <td
       v-for="(col, index) in columns"
       :key="col"
