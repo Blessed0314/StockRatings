@@ -1,13 +1,14 @@
 package services
 
 import (
-    "math"
-    "sort"
-    "time"
+	"math"
+	"sort"
+	"time"
 
-    "github.com/Blessed0314/tru-test/api/internal/dtos"
-    "github.com/Blessed0314/tru-test/api/internal/models"
-    "github.com/Blessed0314/tru-test/api/internal/repository"
+	"github.com/Blessed0314/tru-test/api/internal/dtos"
+	"github.com/Blessed0314/tru-test/api/internal/models"
+	"github.com/Blessed0314/tru-test/api/internal/repository"
+	"github.com/Blessed0314/tru-test/api/internal/utils"
 )
 
 // Calcula el puntaje de la acción
@@ -27,11 +28,11 @@ func calculateScore(stock models.StockRating) float64 {
     }
 
     // Penalización por antigüedad (datos más nuevos son mejores)
-    daysOld := time.Since(stock.CreatedAt).Hours() / 24
+    daysOld := time.Since(stock.Time).Hours() / 24
     recencyBoost := math.Max(0, 30-daysOld) / 30 * 10
 
     // Puntuación final
-    return percentageChange + ratingBoost + recencyBoost
+    return math.Round((percentageChange + ratingBoost + recencyBoost) * 100) / 100
 }
 
 // Obtiene las mejores acciones para invertir
@@ -53,7 +54,7 @@ func GetStockRecommendations() ([]dtos.StockRecommendationDTO, error) {
             Ticker:  stock.Ticker,
             Company: stock.Company,
             Broker:  stock.Brokerage,
-            Target:  stock.TargetTo - stock.TargetFrom,
+            Target:  utils.ConvertToString(stock.TargetTo - stock.TargetFrom),
             Rating:  stock.RatingTo,
             Score:   score,
         })

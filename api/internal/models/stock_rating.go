@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -15,4 +17,5 @@ type StockRating struct {
 	RatingTo   string  `json:"rating_to" gorm:"size:100"`
 	TargetFrom float64 `json:"target_from" gorm:"type:FLOAT;not null"`
     TargetTo   float64 `json:"target_to" gorm:"type:FLOAT;not null"`
+	Time	   time.Time `json:"time" gorm:"type:TIMESTAMP;not null"`
 }
