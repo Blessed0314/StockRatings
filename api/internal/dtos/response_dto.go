@@ -15,9 +15,9 @@ type StockRecommendationDTO struct {
 	Ticker   string  `json:"ticker"`
 	Company  string  `json:"company"`
 	Broker   string  `json:"brokerage"`
-	Target   float64 `json:"target_change"`
+	Target   string `json:"target_change"`
 	Rating   string  `json:"rating"`
-	Score    float64 `json:"score"`
+	Score    float64  `json:"score"`
 }
 
 type StockDBDTO struct {

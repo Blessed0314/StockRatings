@@ -93,6 +93,7 @@ func SaveData(stockData []dtos.StockRatingDTO) error {
                 RatingTo:   stockRating.RatingTo,
                 TargetFrom: targetFrom,
                 TargetTo:   targetTo,
+                Time:       stockRating.Time,
             }
 
             if err := stockRepo.Save(&newStock); err != nil {
@@ -106,6 +107,7 @@ func SaveData(stockData []dtos.StockRatingDTO) error {
             existingStockRating.RatingTo = stockRating.RatingTo
             existingStockRating.TargetFrom = targetFrom
             existingStockRating.TargetTo = targetTo
+            existingStockRating.Time = stockRating.Time
 
             if err := stockRepo.Update(&existingStockRating); err != nil {
                 return fmt.Errorf("❌ Error updating DB: %v", err)
