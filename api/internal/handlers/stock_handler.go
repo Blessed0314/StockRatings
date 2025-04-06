@@ -1,11 +1,13 @@
 package handlers
 
 import (
-    "net/http"
-    "strconv"
+	"errors"
+	"net/http"
+	"strconv"
 
-    "github.com/Blessed0314/tru-test/api/internal/services"
-    "github.com/Blessed0314/tru-test/api/internal/utils"
+	"github.com/Blessed0314/tru-test/api/internal/services"
+	"github.com/Blessed0314/tru-test/api/internal/utils"
+	"github.com/gorilla/mux"
 )
 
 
@@ -42,6 +44,51 @@ func GetAllStocksHandler(w http.ResponseWriter, r *http.Request) {
     page, pageSize := validatePaginationParams(r)
 
     stocks, err := services.GetAllStocks()
+    if err != nil {
+        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stocks", nil)
+        return
+    }
+
+    // Aplicar paginación antes de enviar la respuesta
+    paginatedResponse := utils.Paginate(stocks, page, pageSize)
+
+    utils.SendResponse(w, http.StatusOK, "Stocks OK", paginatedResponse)
+}
+
+func GetStockByTickerHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    ticker := vars["ticker"]
+    if ticker == "" {
+        utils.SendResponse(w, http.StatusBadRequest, "Ticker parameter is required", nil)
+        return
+    }
+
+    stock, err := services.GetStockByTicker(ticker)
+
+    if errors.Is(err, services.ErrStockNotFound) {
+        utils.SendResponse(w, http.StatusNotFound, "Stock not found", nil)
+        return
+    }
+
+    if err != nil {
+        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stock", nil)
+        return
+    }
+
+    utils.SendResponse(w, http.StatusOK, "Stock OK", stock)
+}
+
+func GetStocksByTickerPrefixHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    ticker := vars["tickerPrefix"]
+    if ticker == "" {
+        utils.SendResponse(w, http.StatusBadRequest, "Ticker parameter is required", nil)
+        return
+    }
+
+    page, pageSize := validatePaginationParams(r)
+
+    stocks, err := services.GetStocksByTickerPrefix(ticker)
     if err != nil {
         utils.SendResponse(w, http.StatusInternalServerError, "Error getting stocks", nil)
         return
