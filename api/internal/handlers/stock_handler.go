@@ -30,14 +30,14 @@ func GetStockRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 
     recommendations, err := services.GetStockRecommendations()
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, "Error getting recommendations", nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, "Error getting recommendations", nil)
         return
     }
 
     // Aplicar paginación antes de enviar la respuesta
     paginatedResponse := utils.Paginate(recommendations, page, pageSize)
 
-    utils.SendResponse(w, http.StatusOK, "Recommendations OK", paginatedResponse)
+    utils.SendResponse(w, r, http.StatusOK, "Recommendations OK", paginatedResponse)
 }
 
 func GetAllStocksHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,44 +45,44 @@ func GetAllStocksHandler(w http.ResponseWriter, r *http.Request) {
 
     stocks, err := services.GetAllStocks()
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stocks", nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, "Error getting stocks", nil)
         return
     }
 
     // Aplicar paginación antes de enviar la respuesta
     paginatedResponse := utils.Paginate(stocks, page, pageSize)
 
-    utils.SendResponse(w, http.StatusOK, "Stocks OK", paginatedResponse)
+    utils.SendResponse(w, r, http.StatusOK, "Stocks OK", paginatedResponse)
 }
 
 func GetStockByTickerHandler(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     ticker := vars["ticker"]
     if ticker == "" {
-        utils.SendResponse(w, http.StatusBadRequest, "Ticker parameter is required", nil)
+        utils.SendResponse(w, r, http.StatusBadRequest, "Ticker parameter is required", nil)
         return
     }
 
     stock, err := services.GetStockByTicker(ticker)
 
     if errors.Is(err, services.ErrStockNotFound) {
-        utils.SendResponse(w, http.StatusNotFound, "Stock not found", nil)
+        utils.SendResponse(w, r, http.StatusNotFound, "Stock not found", nil)
         return
     }
 
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stock", nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, "Error getting stock", nil)
         return
     }
 
-    utils.SendResponse(w, http.StatusOK, "Stock OK", stock)
+    utils.SendResponse(w, r, http.StatusOK, "Stock OK", stock)
 }
 
 func GetStocksByTickerPrefixHandler(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     ticker := vars["tickerPrefix"]
     if ticker == "" {
-        utils.SendResponse(w, http.StatusBadRequest, "Ticker parameter is required", nil)
+        utils.SendResponse(w, r, http.StatusBadRequest, "Ticker parameter is required", nil)
         return
     }
 
@@ -90,12 +90,12 @@ func GetStocksByTickerPrefixHandler(w http.ResponseWriter, r *http.Request) {
 
     stocks, err := services.GetStocksByTickerPrefix(ticker)
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, "Error getting stocks", nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, "Error getting stocks", nil)
         return
     }
 
     // Aplicar paginación antes de enviar la respuesta
     paginatedResponse := utils.Paginate(stocks, page, pageSize)
 
-    utils.SendResponse(w, http.StatusOK, "Stocks OK", paginatedResponse)
+    utils.SendResponse(w, r, http.StatusOK, "Stocks OK", paginatedResponse)
 }
