@@ -10,7 +10,9 @@ import (
 
 
 
-func SendResponse(w http.ResponseWriter, statusCode int, message string, data any) {
+func SendResponse(w http.ResponseWriter, r *http.Request, statusCode int, message string, data any) {
+    CreateLog(r, statusCode, message)
+    
     response := dtos.Response{
         StatusCode: statusCode,
         Message:    message,
