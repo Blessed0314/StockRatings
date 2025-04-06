@@ -6,6 +6,7 @@ import (
 
 	"github.com/Blessed0314/tru-test/api/internal/models"
 	"github.com/Blessed0314/tru-test/api/internal/routes"
+	"github.com/Blessed0314/tru-test/api/internal/middlewares"
 	"github.com/Blessed0314/tru-test/api/pkg/db"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	}
 
 	mainRoutes := routes.InitRouter()
-	corsRoutes := routes.ConfigureCORS(mainRoutes)
+	corsRoutes := middlewares.ConfigureCORS(mainRoutes)
 
 	log.Fatal(http.ListenAndServe(":3001", corsRoutes))
 }

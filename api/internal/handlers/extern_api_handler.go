@@ -11,7 +11,7 @@ import (
 func GetDataHandler(w http.ResponseWriter, r *http.Request) {
     token := os.Getenv("API_TOKEN")
     if token == "" {
-        utils.SendResponse(w, http.StatusInternalServerError, "API_TOKEN is not configured", nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, "API_TOKEN is not configured", nil)
         return
     }
 
@@ -22,15 +22,15 @@ func GetDataHandler(w http.ResponseWriter, r *http.Request) {
 
     data, err := client.FetchData()
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, err.Error(), nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, err.Error(), nil)
         return
     }
 
     err = services.SaveData(data)
     if err != nil {
-        utils.SendResponse(w, http.StatusInternalServerError, err.Error(), nil)
+        utils.SendResponse(w, r, http.StatusInternalServerError, err.Error(), nil)
         return
     }
 
-    utils.SendResponse(w, http.StatusOK, "Data saved successfully", nil)
+    utils.SendResponse(w, r, http.StatusOK, "Data saved successfully", nil)
 }
