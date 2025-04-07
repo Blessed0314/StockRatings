@@ -10,19 +10,32 @@ export const useStockStore = defineStore('stock', {
     page: 1,
     pageSize: 10,
     isRecomendation: false,
+    isUpdate: false,
   }),
   actions: {
+    async updateStocks() {
+      try {
+        this.isUpdate = true;
+        const { data } = await apiService.get(`/api/data`);
+        
+        this.stocks = data.data.stocks;
+        this.total = data.data.total;
+      } catch (error) {
+        throw(error);
+      } finally {
+        this.isUpdate = false;
+      }
+    },
     async fetchStocks() {
       try {
         const { data } = this.isRecomendation 
           ? await apiService.get(`/stock/recommendations?page=${this.page}&size=${this.pageSize}`)
           : await apiService.get(`/stock/all?page=${this.page}&size=${this.pageSize}`);
-        console.log(data);
         
         this.stocks = data.data.stocks;
         this.total = data.data.total;
       } catch (error) {
-        console.log(error);
+        throw(error);
       }
     },
     toggleRecomendation() {
