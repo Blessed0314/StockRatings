@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="container max-w-xl mx-auto text-center my-4 bg-black/50 ">
+  <div class="container max-w-xl mx-auto text-center my-4 bg-black/50">
     <h1 class="text-4xl font-bold tracking-widest text-sky-500">
       Stockrating App
     </h1>
