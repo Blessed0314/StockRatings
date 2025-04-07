@@ -4,6 +4,7 @@ import { useStockStore } from "./store/store-stock-selected";
 
 import PageHeader from "./components/PageHeader.vue";
 import StockList from "./components/StockList.vue";
+import SearchBar from "./components/SearchBar.vue";
 import Pager from "./components/Pager.vue";
 import type { Pagination } from "./models/pagination.model";
 import LoadingModal from "./components/LoadingModal.vue";
@@ -18,6 +19,7 @@ const pagination = computed<Pagination>(() => ({
 
 onMounted(() => {
   stockStore.isRecomendation = false;
+  stockStore.isSearching = false;
   stockStore.fetchStocks();
 });
 </script>
@@ -45,6 +47,10 @@ onMounted(() => {
       <span class="font-bold text-white"> Update stock list </span>
     </button>
   </div>
+  <SearchBar
+    v-if="!stockStore.isRecomendation"
+    :toggleSearching="stockStore.toggleSearching"
+  />
   <Pager :pagination="pagination" @pageChange="stockStore.onPageChange" />
   <StockList :stocks="stockStore.stocks" />
   <LoadingModal v-if="stockStore.isUpdate" />
